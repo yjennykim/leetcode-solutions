@@ -6,7 +6,7 @@ class Solution:
 
         forward = [0] * n
         backward = [0] * n
-        res = [0] * n
+        res = [1] * n
 
         running = 1
         for i in range(len(nums)):
@@ -18,9 +18,10 @@ class Solution:
             running *= nums[i]
             backward[i] = running
         
-        res[0] = backward[1]
-        res[-1] = forward[-2]
-        for i in range(1, len(nums)-1):
-            res[i] = forward[i-1] * backward[i+1]
+        for i in range(len(nums)):
+            if i - 1 >= 0:
+                res[i] *= forward[i-1]
+            if i + 1 < len(nums):
+                res[i] *= backward[i+1]
         
         return res
