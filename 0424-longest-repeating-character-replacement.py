@@ -1,26 +1,27 @@
 class Solution:
     def characterReplacement(self, s: str, k: int) -> int:
-        l = 0
-        counts = {}
-        longest = 0
-
-        def is_valid():
-            most_counted_character = max(counts, key=counts.get)
-
-            replace_count = 0
-            for ch, count in counts.items():
-                if ch != most_counted_character:
-                    replace_count += count
+        counter = {}
+        longest_substr = 0
+        l, r = 0, 0
+        while r < len(s):
+            if s[r] not in counter:
+                counter[s[r]] = 0
+            counter[s[r]] += 1
             
-            return True if replace_count <= k else False
-        
-        for r in range(len(s)):
-            counts[s[r]] = counts.get(s[r], 0) + 1
+            subs = (r-l+1) - max(counter.values())  # number of substitutions needed = window size - most common value
 
-            while not is_valid():
-                counts[s[l]] -= 1
+            # start removing from left window
+            while subs > k:
+                counter[s[l]] -= 1
+                # if counter[s[l]] == 0:
+                #     del counter[s[l]]
                 l += 1
+                subs = (r-l+1) - max(counter.values())
+            
+            longest_substr = max(longest_substr, r-l+1)
+            r += 1
 
-            longest = max(longest, r-l+1)
+        return longest_substr
+            
 
-        return longest
+ 
