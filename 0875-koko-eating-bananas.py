@@ -1,22 +1,18 @@
 class Solution:
     def minEatingSpeed(self, piles: List[int], h: int) -> int:
+        l,r = 1, max(piles)
 
-        def is_possible(k):
-            hours = 0
-            for pile in piles:
-                hours += math.ceil(pile / k)
-
-            print(f"Is possible? k={k}, hours={hours}, {hours <= h}")
-            return hours <= h
-        
-        l,r = 1,max(piles)
         while l <= r:
-            m = (l+r) // 2
-            possible = is_possible(m)
-            if possible:
-                # try eating less per hour
-                r = m - 1
+            k = (l + r) // 2
+            print(f"trying k={k}")
+            
+            time = 0
+            for pile in piles:
+                time += math.ceil(pile / k)
+            print(f"time={time}")
+            if time <= h: # we have more time
+                r = k - 1   # try eating less bananas
             else:
-                l = m + 1
+                l = k + 1
         
         return l
